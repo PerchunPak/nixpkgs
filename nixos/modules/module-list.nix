@@ -252,6 +252,7 @@
   ./programs/qt5ct.nix
   ./programs/quark-goldleaf.nix
   ./programs/regreet.nix
+  ./programs/nwg-hello.nix
   ./programs/rog-control-center.nix
   ./programs/rust-motd.nix
   ./programs/ryzen-monitor-ng.nix
