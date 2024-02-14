@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, gdk-pixbuf
 , gobject-introspection
 , gtk-layer-shell
 , gtk3
@@ -25,6 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
+    gdk-pixbuf
     gtk-layer-shell
   ];
 
