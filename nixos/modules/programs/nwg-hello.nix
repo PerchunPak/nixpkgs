@@ -6,6 +6,10 @@
 let
   cfg = config.programs.nwg-hello;
   settingsFormat = pkgs.formats.json { };
+
+  defaultAttrs = builtins.fromJSON (builtins.readFile "${pkgs.nwg-hello}/etc/nwg-hello/nwg-hello-default.json");
+  cfgAttrs = lib.mkIf (! lib.isPath cfg.settings) (builtins.fromJSON cfg.settings);
+  mergedAttrs = lib.mergeAttrs defaultAttrs cfgAttrs;
 in
 {
   options.programs.nwg-hello = {
@@ -72,10 +76,15 @@ in
         then { source = cfg.extraCss; }
         else { text = cfg.extraCss; };
 
+      # "nwg-hello/nwg-hello.json".source =
+      #   if lib.isPath cfg.settings
+      #   then cfg.settings
+      #   else (builtins.fromJSON (builtins.readFile "${pkgs.nwg-hello}/etc/nwg-hello/nwg-hello-default.json")) // settingsFormat.generate "nwg-hello.json" cfg.settings;
+
       "nwg-hello/nwg-hello.json".source =
         if lib.isPath cfg.settings
         then cfg.settings
-        else (builtins.fromJSON (builtins.readFile "${pkgs.nwg-hello}/etc/nwg-hello/nwg-hello-default.json")) // settingsFormat.generate "nwg-hello.json" cfg.settings;
+        else settingsFormat.generate "nwg-hello.json" mergedAttrs;
     };
 
     systemd.tmpfiles.settings."10-nwg-hello" =
