@@ -63,6 +63,9 @@
 , Foundation
 , libobjc
 , VideoToolbox
+, xcodebuild
+, common-updater-scripts
+, writers
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -142,7 +145,7 @@ let
     # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
     # are written with respect to the parent directory instead of that source directory.
     # patches which don't cleanly apply are commented out.
-    postPatch = (old.postPatch or "") + ''
+    postPatch = (old.postPatch or "") + /* bash */ ''
       pushd ..
       # patch -p1 < ${src}/contrib/x265/A00-crosscompile-fix.patch
       patch -p1 < ${src}/contrib/x265/A01-threads-priority.patch
@@ -154,7 +157,7 @@ let
     '';
   });
 
-  versionFile = writeText "version.txt" ''
+  versionFile = writeText "version.txt" /* bash */ ''
     BRANCH=${versions.majorMinor version}.x
     DATE=1970-01-01 00:00:01 +0000
     HASH=${src.rev}
@@ -172,20 +175,21 @@ let
     pname = "handbrake";
     inherit version src;
 
-    postPatch = ''
+    postPatch = /* bash */ ''
       install -Dm444 ${versionFile} ${versionFile.name}
 
       patchShebangs scripts
 
       substituteInPlace libhb/hb.c \
-        --replace 'return hb_version;' 'return "${version}";'
+        --replace-fail 'return hb_version;' 'return "${version}";'
 
       # Force using nixpkgs dependencies
       sed -i '/MODULES += contrib/d' make/include/main.defs
       sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
           -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
           -i make/configure.py
-    '' + optionalString stdenv.isDarwin ''
+    '' + optionalString stdenv.isDarwin /* bash */ ''
+      echo "Patching darwin..."
       # Use the Nix-provided libxml2 instead of the patched version available on
       # the Handbrake website.
       substituteInPlace libhb/module.defs \
@@ -195,11 +199,24 @@ let
       # which it isn't in the Nix context. (The actual build goes fine without
       # xcodebuild.)
       sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
-    '' + optionalString stdenv.isLinux ''
+
+      # use pregenerated nib files because generating them requires XCode
+      for path in ${./mac}/**/*.nib ${./mac}/*.nib; do
+        # Extract filename with relative path
+        filename="''${path##*${./mac}/}"
+        destination="macosx/$filename"
+
+        # Copy the nib file to the destination while maintaining the relative path
+        cp -r "$path" "$destination"
+      done
+
+      find macosx -type f -name "*.nib" -exec chmod u+w {} \;  # Make all nib files writable
+      # find macosx -type f -name "*.nib" -ls
+    '' + optionalString stdenv.isLinux /* bash */ ''
       # Use the Nix-provided libxml2 instead of the system-provided one.
       substituteInPlace libhb/module.defs \
-        --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
-    '' + optionalString useGtk ''
+        --replace-fail /usr/include/libxml2 ${libxml2.dev}/include/libxml2
+    '' + optionalString useGtk /* bash */ ''
       substituteInPlace gtk/module.rules \
         --replace-fail '$(MESON.exe)' 'meson' \
         --replace-fail '$(NINJA.exe)' 'ninja' \
@@ -220,7 +237,8 @@ let
       pkg-config
       python3
     ]
-    ++ optionals useGtk [ desktop-file-utils intltool meson ninja wrapGAppsHook ];
+    ++ optionals useGtk [ desktop-file-utils intltool meson ninja wrapGAppsHook ]
+    ++ optional stdenv.isDarwin [ xcodebuild ];
 
     buildInputs = [
       a52dec
@@ -315,6 +333,34 @@ let
         '';
 
       tests.version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
+
+      updateScript = writers.writeBash "update-handbrake-mac" ''
+        set -euxo pipefail
+
+        main() {
+          tag="$(queryLatestTag)"
+          ver="$(expr "$tag" : '\(.*\)')"
+
+          ${common-updater-scripts}/bin/update-source-version handbrake "$ver"
+
+          cd ${lib.escapeShellArg ./.}
+          rm -rf mac
+          mkdir mac
+
+          srcDir="$(nix-build ../../../.. --no-out-link -A handbrake.src)"
+          for path in "$srcDir"/macosx/**/*.xib "$srcDir"/macosx/*.xib; do
+            filename="''${path##*/macosx}"
+            /usr/bin/ibtool --compile "mac/''${filename%.*}.nib" "$path"
+          done
+        }
+
+        queryLatestTag() {
+          curl -sS https://api.github.com/repos/HandBrake/HandBrake/tags \
+            | jq -r '.[] | .name' | sort --version-sort | tail -1
+        }
+
+        main
+      '';
     };
 
     meta = with lib; {
@@ -331,7 +377,7 @@ let
       license = licenses.gpl2Only;
       maintainers = with maintainers; [ Anton-Latukha wmertens ];
       platforms = with platforms; unix;
-      broken = stdenv.isDarwin;  # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
+      # broken = stdenv.isDarwin;  # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
   };
 in
