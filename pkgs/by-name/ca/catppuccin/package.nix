@@ -17,6 +17,7 @@ let
     "starship"
     "thunderbird"
     "waybar"
+    "zathura"
   ];
 in
 {
@@ -192,6 +193,14 @@ let
       rev = "v1.0";
       hash = "sha256-vfwfBE3iqIN1cGoItSssR7h0z6tuJAhNarkziGFlNBw=";
     };
+
+    zathura = fetchFromGitHub {
+      name = "zathura";
+      owner = "catppuccin";
+      repo = "zathura";
+      rev = "0adc53028d81bf047461bc61c43a484d11b15220";
+      hash = "sha256-/vD/hOi6KcaGyAp6Az7jL5/tQSGRzIrf0oHjAJf4QbI=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListOfEnum
@@ -312,6 +321,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       + lib.optionalString (lib.elem "waybar" themeList) ''
         mkdir -p $out/waybar
         cp ${sources.waybar}/${variant}.css $out/waybar/
+
+      ''
+      + lib.optionalString (lib.elem "zathura" themeList) ''
+        mkdir -p $out/zathura
+        cp ${sources.zathura}/src/catppuccin-${variant} $out/zathura/
 
       ''
       + ''
