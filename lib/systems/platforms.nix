@@ -16,6 +16,8 @@ rec {
       autoModules = true;
       target = "bzImage";
     };
+
+    gcc.args = "-march=znver3 -O2 -pipe -fomit-frame-pointer -fno-semantic-interposition";
   };
 
   pc_simplekernel = lib.recursiveUpdate pc {

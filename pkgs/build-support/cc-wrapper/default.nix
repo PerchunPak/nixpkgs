@@ -612,8 +612,9 @@ stdenvNoCC.mkDerivation {
 
     # Machine flags. These are necessary to support
 
-    # TODO: We should make a way to support miscellaneous machine
-    # flags and other gcc flags as well.
+    + (optionalString (targetPlatform ? gcc.args) ''
+      echo "${targetPlatform.gcc.args}" >> $out/nix-support/cc-cflags-before
+    '')
 
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
