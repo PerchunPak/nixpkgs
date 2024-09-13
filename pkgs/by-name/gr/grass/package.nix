@@ -34,6 +34,8 @@
   wxGTK32,
   zlib,
   zstd,
+  libGL,
+  xcbuild,
 }:
 let
   pyPackages = python311Packages;
@@ -61,56 +63,56 @@ stdenv'.mkDerivation (finalAttrs: {
       netcdf # for `nc-config`
       pkg-config
     ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild.xcrun
+    ]
     ++ (with pyPackages; [
       python-dateutil
       numpy
       wxpython
     ]);
 
-  buildInputs = [
-    blas
-    cairo
-    ffmpeg
-    fftw
-    freetype
-    gdal
-    geos
-    lapack
-    libpng
-    libsvm
-    libtiff
-    (libxml2.override { enableHttp = true; })
-    netcdf
-    pdal
-    postgresql
-    proj
-    readline
-    sqlite
-    wxGTK32
-    zlib
-    zstd
-  ] ++ lib.optionals withOpenGL [ libGLU ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs =
+    [
+      blas
+      cairo
+      ffmpeg
+      fftw
+      freetype
+      gdal
+      geos
+      lapack
+      libpng
+      libsvm
+      libtiff
+      (libxml2.override { enableHttp = true; })
+      netcdf
+      pdal
+      postgresql
+      proj
+      readline
+      sqlite
+      wxGTK32
+      zlib
+      zstd
+    ]
+    ++ lib.optionals withOpenGL [ libGLU ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
   strictDeps = true;
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
 
   configureFlags =
     [
       "--with-blas"
-      "--with-cairo-ldflags=-lfontconfig"
       "--with-cxx"
       "--with-fftw"
-      "--with-freetype"
       "--with-geos"
       "--with-gdal"
       "--with-lapack"
       "--with-libsvm"
       "--with-nls"
-      "--with-openmp"
       "--with-pdal"
       "--with-postgres"
       "--with-postgres-libs=${postgresql.lib}/lib/"
@@ -123,13 +125,23 @@ stdenv'.mkDerivation (finalAttrs: {
       "--without-mysql"
       "--without-odbc"
     ]
+    ++ lib.optionals stdenv.isLinux [
+      "--with-openmp"
+      "--with-cairo-ldflags=-lfontconfig"
+      "--with-freetype"
+    ]
     ++ lib.optionals (!withOpenGL) [
       "--without-opengl"
     ]
     ++ lib.optionals stdenv.isDarwin [
+      "--enable-macosx-app"
+      "--prefix=/Applications"
       "--without-cairo"
       "--without-freetype"
       "--without-x"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && withOpenGL) [
+      "--with-opengl=aqua"
     ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
