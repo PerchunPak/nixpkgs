@@ -21,6 +21,7 @@
   libxml2,
   makeWrapper,
   netcdf,
+  overrideSDK,
   pdal,
   pkg-config,
   postgresql,
@@ -36,8 +37,9 @@
 }:
 let
   pyPackages = python311Packages;
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "8.4.0";
 
