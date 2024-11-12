@@ -156,6 +156,11 @@ in
     nvimRequireCheck = "advanced_git_search.utils";
   };
 
+  asyncrun-vim = super.asyncrun-vim.overrideAttrs {
+    # NOTE:vim plugin with optional lua telescope integration
+    doCheck = false;
+  };
+
   animation-nvim = super.animation-nvim.overrideAttrs {
     dependencies = with self; [ middleclass ];
     nvimRequireCheck = "animation";
@@ -783,6 +788,11 @@ in
     ];
   };
 
+  context-vim = super.context-vim.overrideAttrs {
+    # Vim plugin with optional lua highlight module
+    doCheck = false;
+  };
+
   CopilotChat-nvim = super.CopilotChat-nvim.overrideAttrs {
     dependencies = with self; [
       copilot-lua
@@ -1053,6 +1063,11 @@ in
     dependencies = [ self.self ];
   };
 
+  friendly-snippets = super.friendly-snippets.overrideAttrs {
+    # just debug folder with lua files
+    doCheck = false;
+  };
+
   fruzzy =
     let
       # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
@@ -1211,6 +1226,8 @@ in
       rev = "v${himalaya.version}";
       sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
     };
+    # NOTE: vim plugin with optional telescope lua module
+    doCheck = false;
   };
 
   hunk-nvim = super.hunk-nvim.overrideAttrs {
@@ -1270,6 +1287,11 @@ in
 
   jellybeans-nvim = super.jellybeans-nvim.overrideAttrs {
     dependencies = with self; [ lush-nvim ];
+  };
+
+  jinja-vim = super.jinja-vim.overrideAttrs {
+    # Vim plugin has xdg folder with lua files
+    doCheck = false;
   };
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
@@ -1496,6 +1518,11 @@ in
   mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim ];
     nvimRequireCheck = "mason-tool-installer";
+  };
+
+  material-vim = super.material-vim.overrideAttrs {
+    # NOTE: vim plugin with optional lualine module
+    doCheck = false;
   };
 
   meson = buildVimPlugin {
@@ -1780,6 +1807,11 @@ in
     nvimRequireCheck = "coverage";
   };
 
+  nvim-moonwalk = super.nvim-moonwalk.overrideAttrs {
+    # Asserts log file exists before it is created
+    doCheck = false;
+  };
+
   nvim-dap-python = super.nvim-dap-python.overrideAttrs {
     dependencies = with self; [ nvim-dap ];
     nvimRequireCheck = "dap-python";
@@ -2059,6 +2091,12 @@ in
     ];
   };
 
+  persisted-nvim = super.persisted-nvim.overrideAttrs {
+    # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)
+    # https://github.com/olimorris/persisted.nvim/issues/146
+    doCheck = false;
+  };
+
   phpactor = buildVimPlugin {
     inherit (phpactor)
       pname
@@ -2097,6 +2135,11 @@ in
         mdt = lib.getExe md-tui;
       })
     ];
+  };
+
+  rainbow = super.rainbow.overrideAttrs {
+    # Vim plugin has test folder with lua files
+    doCheck = false;
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
@@ -2316,6 +2359,11 @@ in
       nvimRequireCheck = "sqlite";
     }
   );
+
+  srcery-vim = super.srcery-vim.overrideAttrs {
+    # vim colorscheme with optional lualine module that requires lualine to configure
+    doCheck = false;
+  };
 
   ssr = super.ssr-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter ];
@@ -2540,6 +2588,9 @@ in
 
   telescope-symbols-nvim = super.telescope-symbols-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim ];
+    # Just contains json files for builtin symbols picker
+    # Lua file is for devs to update the symbols lists
+    doCheck = false;
   };
 
   telescope-ui-select-nvim = super.telescope-ui-select-nvim.overrideAttrs {
@@ -2623,6 +2674,8 @@ in
         cd vim-plugin
       '';
       meta.maintainers = with lib.maintainers; [ enderger ];
+      # Build system with some source files in it that contain lua
+      doCheck = false;
     };
 
   typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
@@ -2954,6 +3007,11 @@ in
     nvimRequirecheck = "tabby";
   };
 
+  vim-test = super.vim-test.overrideAttrs {
+    # Vim plugin with a test lua file
+    doCheck = false;
+  };
+
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = with self; [ vim-textobj-user ];
     meta.maintainers = with lib.maintainers; [ farlion ];
@@ -3051,6 +3109,23 @@ in
 
   vimshell-vim = super.vimshell-vim.overrideAttrs {
     dependencies = with self; [ vimproc-vim ];
+  };
+
+  vimspector = super.vimspector.overrideAttrs {
+    #NOTE: vim plugin with optional lua modules
+    doCheck = false;
+  };
+
+  vim-prosession = super.vim-prosession.overrideAttrs {
+    # NOTE: Vim plugin with optional telescope dependency
+    doCheck = false;
+  };
+
+  vim-ultest = super.vim-ultest.overrideAttrs {
+    # TODO: remove after 24.11
+    # NOTE: vim-ultest is no longer maintained.
+    # You can switch to using neotest (https://github.com/nvim-neotest/neotest) instead.
+    doCheck = false;
   };
 
   vim-zettel = super.vim-zettel.overrideAttrs {
