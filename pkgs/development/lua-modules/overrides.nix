@@ -861,6 +861,21 @@ in
     ];
   });
 
+  tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (oa: {
+    propagatedBuildInputs = let
+      # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+      # but that doesn't seem to work
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.propagatedBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser
+      tree-sitter
+    ];
+
+    preInstall= ''
+      export HOME="$TMPDIR";
+    '';
+  });
+
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = (luaOlder "5.1" || luaAtLeast "5.4");
   });
