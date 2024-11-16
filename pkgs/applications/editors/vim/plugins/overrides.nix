@@ -1803,8 +1803,8 @@ in
     ];
   };
 
-  orgmode = super.orgmode.overrideAttrs {
-    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
+  orgmode = neovimUtils.buildNeovimPlugin {
+    luaAttr = luaPackages.orgmode;
     nvimRequireCheck = "orgmode";
   };
 

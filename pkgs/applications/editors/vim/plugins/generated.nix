@@ -9955,18 +9955,6 @@ final: prev:
     meta.homepage = "https://github.com/salkin-mada/openscad.nvim/";
   };
 
-  orgmode = buildVimPlugin {
-    pname = "orgmode";
-    version = "2024-11-05";
-    src = fetchFromGitHub {
-      owner = "nvim-orgmode";
-      repo = "orgmode";
-      rev = "fafb8f14d85a68d8f0fca812444cc0fd594f0168";
-      sha256 = "149fd4hyng6g3phg3d3fl3fbwkg5yv9kkzdw80jxm329x63fmps6";
-    };
-    meta.homepage = "https://github.com/nvim-orgmode/orgmode/";
-  };
-
   other-nvim = buildVimPlugin {
     pname = "other.nvim";
     version = "2024-10-19";
@@ -18912,6 +18900,5 @@ final: prev:
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
-
 
 }
