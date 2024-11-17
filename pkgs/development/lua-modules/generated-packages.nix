@@ -2857,17 +2857,19 @@ buildLuarocksPackage {
   };
 }) {};
 
-orgmode = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, tree-sitter-orgmode }:
+orgmode = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder, tree-sitter-orgmode }:
 buildLuarocksPackage {
   pname = "orgmode";
-  version = "0.3.61-1";
+  version = "dev-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/orgmode-0.3.61-1.rockspec";
-    sha256 = "1sdmqaq3vzpb0c74n45piqrlcw3liiqlv282nrgr16jzsz1c870g";
+    url    = "mirror://luarocks/orgmode-dev-1.rockspec";
+    sha256 = "1blm5z2zia412xrq2n99zznci67sqbvdfsiiyxpmjy4kgj03sf02";
   }).outPath;
-  src = fetchzip {
-    url    = "https://github.com/nvim-orgmode/orgmode/archive/0.3.61.zip";
-    sha256 = "1gkpwyfvw9z92277q6311r924rmb9zidgmlr4xxkmn2xrj5qwl7x";
+  src = fetchFromGitHub {
+    owner = "nvim-orgmode";
+    repo = "orgmode";
+    rev = "1d8c9b9417f8c8e9fb146d4f54fb1e90a4f7e534";
+    hash = "sha256-uKJuJsxQhdh3NxZx1Uu72poQVFN7KEyyMFEHPUr7UgQ=";
   };
 
   disabled = luaOlder "5.1";

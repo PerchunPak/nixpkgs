@@ -120,7 +120,7 @@ nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,,
 nvim-nio,,,,,,mrcjkb
-orgmode,,,,,,
+orgmode,,,https://luarocks.org/dev,,,
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
