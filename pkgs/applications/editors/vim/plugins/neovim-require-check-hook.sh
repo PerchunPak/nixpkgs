@@ -6,28 +6,42 @@ echo "Sourcing neovim-require-check-hook.sh"
 discover_modules() {
     echo "Running module discovery in source directory..."
 
-    declare -A modules # Use associative array for unique module names
-    while IFS= read -r lua_file; do
-        if [[ "$lua_file" =~ /after/ ]]; then
-            echo "Skipping file in 'after' directory: $lua_file"
-            continue
-        fi
+    # Create unique lists so we can organize later
+    lua_init=()
+    plugin=()
+    lua_name=()
+    lua_subfolder=()
+    folder_path=()
 
-        if [[ "$lua_file" =~ lua/(.*)/init\.lua$ ]]; then
-            # Capture "name" from `lua/name/init.lua`
-            modules["${BASH_REMATCH[1]}"]=1
+    # Check directory and organize lua files into buckets
+    while IFS= read -r lua_file; do
+        if [[ "$lua_file" =~ lua/([^/]+)/init\.lua$ ]]; then
+            echo "$lua_file"
+            lua_init+=("${BASH_REMATCH[1]}")
+        elif [[ ! "$lua_file" =~ ftplugin && "$lua_file" =~ plugin/([^/]+)\.lua$ ]]; then
+            echo "$lua_file"
+            plugin+=("${BASH_REMATCH[1]}")
+        elif [[ "$lua_file" =~ lua/([^/]+).lua$ ]]; then
+            echo "$lua_file"
+            lua_name+=("${BASH_REMATCH[1]}")
         elif [[ "$lua_file" =~ lua/(.*)\.lua$ ]]; then
-            # Capture full path as module name, e.g., `myplugin.utils` from `lua/myplugin/utils.lua`
-            module_name="${BASH_REMATCH[1]//\//.}"
-            modules["$module_name"]=1
-        elif [[ "$lua_file" =~ plugin/(.*)\.lua$ ]]; then
-            # Handle cases in `plugin/*.lua`
-            module_name="${BASH_REMATCH[1]}"
-            modules["$module_name"]=1
+            echo "$lua_file"
+            lua_subfolder+=("${BASH_REMATCH[1]//\//.}")
+        elif [[ ! "$lua_file" =~ .*source/(debug|scripts?|tests?|spec)/ && "$lua_file" =~ .*source/(.*)\.lua$ ]]; then
+            echo "$lua_file"
+            folder_path+=("${BASH_REMATCH[1]//\//.}")
         fi
     done < <(find "$src" -name '*.lua')
 
-    nvimRequireCheck=("${!modules[@]}")
+    # Creating a sorted list to organize checks in order of importance
+    modules=()
+    modules+=("${lua_init[@]}")
+    modules+=("${plugin[@]}")
+    modules+=("${lua_name[@]}")
+    modules+=("${lua_subfolder[@]}")
+    modules+=("${folder_path[@]}")
+
+    nvimRequireCheck=("${modules[@]}")
     echo "Discovered modules: ${nvimRequireCheck[*]}"
 
     if [ "${#nvimRequireCheck[@]}" -eq 0 ]; then
