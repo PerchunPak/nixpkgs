@@ -234,7 +234,14 @@ Finally, there are some plugins that are also packaged in nodePackages because t
 
 ### Testing Neovim plugins {#testing-neovim-plugins}
 
-`nvimRequireCheck=MODULE` is a simple test which checks if Neovim can requires the lua module `MODULE` without errors. This is often enough to catch missing dependencies.
+#### neovimRequireCheck {#testing-neovim-plugins-neovim-require-check}
+`neovimRequireCheck` is a simple test which checks if Neovim can requires lua modules without errors. This is often enough to catch missing dependencies.
+
+It accepts a single string for a module, or a list of module strings to test.
+- `nvimRequireCheck = MODULE;`
+- `nvimRequireCheck = [ MODULE1 MODULE2 ];`
+
+When `neovimRequireCheck` is not specified, we will search the plugin's directory for lua modules to attempt loading. But, we will not fail the build if something is loaded properly. This quick smoke test can catch obvious dependency errors that might be missed.
 
 This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
 
@@ -242,6 +249,16 @@ This can be manually added through plugin definition overrides in the [overrides
   gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "gitsigns";
+  };
+```
+
+Sometimes, we might not want to actually test loading lua modules for a plugin. In those cases, we can disable `neovimRequireCheck` with `doCheck = false;`.
+
+This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+```nix
+  vim-test = super.vim-test.overrideAttrs {
+    # Vim plugin with a test lua file
+    doCheck = false;
   };
 ```
 
