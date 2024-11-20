@@ -53,8 +53,7 @@ discover_modules() {
 
 # Run require checks on each module in nvimRequireCheck
 run_require_checks() {
-    local stop_on_first_success=$1
-    echo "Starting require checks with stop_on_first_success=$stop_on_first_success"
+    echo "Starting require checks"
     check_passed=false
     failed_modules=()
     successful_modules=()
@@ -70,10 +69,6 @@ run_require_checks() {
             check_passed=true
             successful_modules+=("$name")
             echo "Successfully required module: $name"
-            if [ "$stop_on_first_success" = true ]; then
-                echo "Stopping on first success (discovery mode)"
-                break
-            fi
         else
             echo "Failed to require module: $name"
             failed_modules+=("$name")
@@ -91,22 +86,18 @@ NC="\033[0m" # No Color
 print_summary() {
     echo -e "\n======================================================"
     if [[ "$check_passed" == "true" ]]; then
-        echo -e "${GREEN}Require check succeeded for the following modules:${NC}"
+        echo -e "${GREEN}Require check succeeded for the following ${#successful_modules[@]} modules:${NC}"
         for module in "${successful_modules[@]}"; do
             echo -e "  ${GREEN}- $module${NC}"
         done
-        if [ "$stop_on_first_success" = false ]; then
-            echo "All manually provided modules were checked."
-        else
-            echo "Stopped after first success in auto-discovery mode."
-        fi
+        echo "All lua modules were checked."
     else
         echo -e "${RED}No successful require checks.${NC}"
     fi
 
     # Print any modules that failed with improved formatting and color
     if [ "${#failed_modules[@]}" -gt 0 ]; then
-        echo -e "\n${RED}Require check failed for the following modules:${NC}"
+        echo -e "\n${RED}Require check failed for the following ${#failed_modules[@]} modules:${NC}"
         for module in "${failed_modules[@]}"; do
             echo -e "  ${RED}- $module${NC}"
         done
@@ -129,13 +120,11 @@ neovimRequireCheckHook() {
             echo "No modules found during discovery; exiting hook"
             return
         fi
-        stop_on_first_success=true
     else
         echo "nvimRequireCheck is pre-populated; entering manual check mode"
-        stop_on_first_success=false
     fi
 
-    run_require_checks "$stop_on_first_success"
+    run_require_checks
     print_summary
 }
 
