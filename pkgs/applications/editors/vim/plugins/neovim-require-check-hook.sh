@@ -116,7 +116,7 @@ print_summary() {
     fi
     echo "======================================================"
 
-    if [ "${#successful_modules[@]}" -eq 0 ]; then
+    if [ "${#failed_modules[@]}" -gt 0 ]; then
         return 1
     fi
 }
