@@ -145,6 +145,14 @@ let
   luaPackages = neovim-unwrapped.lua.pkgs;
 in
 {
+  aerial-nvim = super.aerial-nvim.overrideAttrs {
+    # optional dependencies
+    nvimSkipModule = [
+      "lualine.components.aerial"
+      "telescope._extensions.aerial"
+    ];
+  };
+
   alpha-nvim = super.alpha-nvim.overrideAttrs {
     nvimRequireCheck = "alpha";
   };
@@ -175,6 +183,15 @@ in
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
     nvimRequireCheck = "autosave";
+  };
+
+  auto-session = super.auto-session.overrideAttrs {
+    # optional telescope dependency
+    nvimSkipModule = [
+      "auto-session.session-lens.actions"
+      "auto-session.session-lens.init"
+      "telescope._extensions.session-lens"
+    ];
   };
 
   avante-nvim = super.avante-nvim.overrideAttrs (
@@ -238,6 +255,26 @@ in
     }
   );
 
+  bamboo-nvim = super.bamboo-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Requires config table
+      "bamboo.colors"
+      "bamboo.terminal"
+      "bamboo.highlights"
+      "bamboo-light"
+      "bamboo-vulgaris"
+      "bamboo-multiplex"
+      # Optional modules
+      "lualine.themes.bamboo"
+      "barbecue.theme.bamboo"
+    ];
+  };
+
+  barbar-nvim = super.barbar-nvim.overrideAttrs {
+    # nvim-web-devicons dependency
+    nvimSkipModule = "bufferline.utils";
+  };
+
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-lspconfig
@@ -254,6 +291,15 @@ in
 
   base46 = super.base46.overrideAttrs {
     dependencies = with self; [ nvchad ];
+    # Requires global config setup
+    nvimSkipModule = [
+      "nvchad.configs.cmp"
+      "nvchad.configs.gitsigns"
+      "nvchad.configs.luasnip"
+      "nvchad.configs.mason"
+      "nvchad.configs.nvimtree"
+      "nvchad.configs.telescope"
+    ];
   };
 
   # The GitHub repository returns 404, which breaks the update script
@@ -273,6 +319,19 @@ in
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = with self; [ lush-nvim ];
+  };
+
+  bufferline-nvim = super.bufferline-nvim.overrideAttrs {
+    # depends on bufferline.lua being loaded first
+    nvimSkipModule = [ "bufferline.commands" ];
+  };
+
+  catppuccin-nvim = super.catppuccin-nvim.overrideAttrs {
+    nvimSkipModule = [
+      "catppuccin.groups.integrations.noice"
+      "catppuccin.groups.integrations.feline"
+      "catppuccin.lib.vim.init"
+    ];
   };
 
   ccc-nvim = super.ccc-nvim.overrideAttrs {
@@ -346,6 +405,10 @@ in
   cmake-tools-nvim = super.cmake-tools-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "cmake-tools";
+  };
+
+  cmd-parser-nvim = super.cmd-parser-nvim.overrideAttrs {
+    nvimRequireCheck = "cmd-parser";
   };
 
   cmp-ai = super.cmp-ai.overrideAttrs {
@@ -577,6 +640,20 @@ in
       zsh
     ];
     nvimRequireCheck = "cmp_zsh";
+  };
+
+  cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {
+    dependencies = with self; [ colorbuddy-nvim ];
+    # Few broken themes
+    nvimSkipModule = [
+      "cobalt2.plugins.init"
+      "cobalt2.plugins.trouble"
+      "cobalt2.plugins.gitsigns"
+      "cobalt2.plugins.package-info"
+      "cobalt2.plugins.indent-blankline"
+      "cobalt2.plugins.marks"
+      "cobalt2.theme"
+    ];
   };
 
   coc-clangd = buildVimPlugin {
@@ -957,6 +1034,11 @@ in
     '';
   };
 
+  darkearth-nvim = super.darkearth-nvim.overrideAttrs {
+    # Lua module used to build theme
+    nvimSkipModule = "shipwright_build";
+  };
+
   ddc-filter-matcher_head = super.ddc-filter-matcher_head.overrideAttrs {
     dependencies = with self; [ ddc-vim ];
   };
@@ -1046,6 +1128,11 @@ in
       '';
   });
 
+  dropbar-nvim = super.dropbar-nvim.overrideAttrs {
+    # Requires global config table
+    nvimSkipModule = "dropbar.menu";
+  };
+
   elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     fixupPhase = ''
@@ -1067,9 +1154,24 @@ in
     };
   };
 
+  feline-nvim = super.feline-nvim.overrideAttrs {
+    nvimSkipModule = "minimal_init";
+  };
+
+  flash-nvim = super.flash-nvim.overrideAttrs {
+    # Docs require lazyvim
+    # dependencies = with self; [ lazy-nvim ];
+    nvimSkipModule = "flash.docs";
+  };
+
   flit-nvim = super.flit-nvim.overrideAttrs {
     dependencies = with self; [ leap-nvim ];
     nvimRequireCheck = "flit";
+  };
+
+  flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
+    # Optional nvim-dap module
+    nvimSkipModule = "flutter-tools.dap";
   };
 
   follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
@@ -1188,6 +1290,31 @@ in
     nvimRequireCheck = "git-worktree";
   };
 
+  go-nvim = super.go-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Null-ls
+      "go.null_ls"
+      # _GO_NVIM_CFG
+      "go.inlay"
+      "go.project"
+      "go.comment"
+      "go.tags"
+      "go.gotests"
+      "go.format"
+      # nvim-treesitter
+      "go.gotest"
+      "go.ginkgo"
+      "go.ts.go"
+      "go.ts.utils"
+      "go.ts.nodes"
+      "go.fixplurals"
+      # Luasnip
+      "go.snips"
+      "snips.all"
+      "snips.go"
+    ];
+  };
+
   guard-nvim = super.guard-nvim.overrideAttrs {
     dependencies = with self; [ guard-collection ];
     nvimRequireCheck = "guard";
@@ -1247,6 +1374,12 @@ in
     doCheck = false;
   };
 
+  hover-nvim = super.hover-nvim.overrideAttrs {
+    # Single provider issue with reading from config
+    # /lua/hover/providers/fold_preview.lua:27: attempt to index local 'config' (a nil value)
+    nvimSkipModule = "hover.providers.fold_preview";
+  };
+
   hunk-nvim = super.hunk-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
     nvimRequireCheck = "hunk";
@@ -1287,6 +1420,20 @@ in
     '';
 
     nvimRequireCheck = "image";
+  };
+
+  indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
+    # Meta file
+    nvimSkipModule = "ibl.config.types";
+  };
+
+  instant-nvim = super.instant-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Requires global variable config
+      "instant"
+      # instant/log.lua:12: cannot use '...' outside a vararg function near '...'
+      "instant.log"
+    ];
   };
 
   intellitab-nvim = super.intellitab-nvim.overrideAttrs {
@@ -1416,6 +1563,13 @@ in
     nvimRequireCheck = "leetcode";
   };
 
+  legendary-nvim = super.legendary-nvim.overrideAttrs {
+    nvimSkipModule = [
+      "vimdoc-gen"
+      "vimdocrc"
+    ];
+  };
+
   lens-vim = super.lens-vim.overrideAttrs {
     # remove duplicate g:lens#animate in doc/lens.txt
     # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
@@ -1439,6 +1593,15 @@ in
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "lir";
+  };
+
+  lispdocs-nvim = super.lispdocs-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Attempt to connect to sqlitedb
+      "lispdocs.db"
+      "lispdocs.finder"
+      "lispdocs"
+    ];
   };
 
   lsp-progress-nvim = neovimUtils.buildNeovimPlugin {
@@ -1474,6 +1637,11 @@ in
 
   luasnip-latex-snippets-nvim = super.luasnip-latex-snippets-nvim.overrideAttrs {
     dependencies = with self; [ luasnip ];
+    # E5108: /luasnip-latex-snippets/luasnippets/tex/utils/init.lua:3: module 'luasnip-latex-snippets.luasnippets.utils.conditions' not found:
+    # Need to fix upstream
+    nvimSkipModule = [
+      "luasnip-latex-snippets.luasnippets.tex.utils.init"
+    ];
   };
 
   lz-n = neovimUtils.buildNeovimPlugin {
@@ -1549,6 +1717,11 @@ in
     nvimRequireCheck = "mason-lspconfig";
   };
 
+  mason-nvim = super.mason-nvim.overrideAttrs {
+    # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
+    nvimSkipModule = "mason-vendor.zzlib.inflate-bwo";
+  };
+
   mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim ];
     nvimRequireCheck = "mason-tool-installer";
@@ -1597,6 +1770,19 @@ in
   mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {
     # Requires setup call and has optional nvim-cmp dependency
     nvimRequireCheck = "mkdnflow";
+  };
+
+  modicator-nvim = super.modicator-nvim.overrideAttrs {
+    # Optional lualine integration
+    nvimSkipModule = "modicator.integration.lualine.init";
+  };
+
+  molten-nvim = super.molten-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Optional image providers
+      "load_image_nvim"
+      "load_wezterm_nvim"
+    ];
   };
 
   moveline-nvim =
@@ -1681,6 +1867,15 @@ in
   neogit = super.neogit.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "neogit";
+  };
+
+  neorepl-nvim = super.neorepl-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Requires main module loaded first
+      "neorepl.bufs"
+      "neorepl.map"
+      "neorepl.repl"
+    ];
   };
 
   neorg = neovimUtils.buildNeovimPlugin {
@@ -1799,6 +1994,15 @@ in
     nvimRequirecheck = "neo-tree";
   };
 
+  netman-nvim = super.netman-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Optional neo-tree integration
+      "netman.ui.neo-tree.init"
+      "netman.ui.neo-tree.commands"
+      "netman.ui.neo-tree.components"
+    ];
+  };
+
   neuron-nvim = super.neuron-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -1834,6 +2038,38 @@ in
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "null-ls";
+  };
+
+  nvchad = super.nvchad.overrideAttrs {
+    nvimSkipModule = [
+      # Requires global config setup
+      "nvchad.configs.cmp"
+      "nvchad.configs.gitsigns"
+      "nvchad.configs.luasnip"
+      "nvchad.configs.mason"
+      "nvchad.configs.nvimtree"
+      "nvchad.configs.telescope"
+    ];
+  };
+
+  nvchad-ui = super.nvchad-ui.overrideAttrs {
+    nvimSkipModule = [
+      # Requires global config setup
+      "nvchad.tabufline.modules"
+      "nvchad.term.init"
+      "nvchad.themes.init"
+      "nvchad.themes.mappings"
+      "nvchad.cheatsheet.grid"
+      "nvchad.cheatsheet.simple"
+    ];
+  };
+
+  nvim-autopairs = super.nvim-autopairs.overrideAttrs {
+    nvimSkipModule = [
+      # Optional completion dependencies
+      "nvim-autopairs.completion.cmp"
+      "nvim-autopairs.completion.compe"
+    ];
   };
 
   nvim-biscuits = super.nvim-biscuits.overrideAttrs {
@@ -1914,6 +2150,14 @@ in
       nvim-navic
     ];
     nvimRequireCheck = "nvim-navbuddy";
+  };
+
+  nvim-neoclip-lua = super.nvim-neoclip-lua.overrideAttrs {
+    nvimSkipModule = [
+      # Optional dependencies
+      "neoclip.fzf"
+      "neoclip.telescope"
+    ];
   };
 
   nvim-nu = super.nvim-nu.overrideAttrs {
@@ -2549,6 +2793,8 @@ in
       sqlite-lua
       telescope-nvim
     ];
+    # Meta
+    nvimSkipModule = "frecency.types";
   };
 
   telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs {
