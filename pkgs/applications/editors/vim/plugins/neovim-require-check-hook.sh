@@ -62,16 +62,28 @@ run_require_checks() {
     local deps="${dependencies[*]}"
     set +e
     for name in "${nvimRequireCheck[@]}"; do
-        echo "Attempting to require module: $name"
-        if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
-            --cmd "set rtp+=$out,${deps// /,}" \
-            --cmd "lua require('$name')"; then
-            check_passed=true
-            successful_modules+=("$name")
-            echo "Successfully required module: $name"
-        else
-            echo "Failed to require module: $name"
-            failed_modules+=("$name")
+        local skip=false
+        for module in "${nvimSkipModule[@]}"; do
+            if [[ "$module" == "$name" ]]; then
+                # $name is in the list
+                echo "$name is in list of modules to not check. Skipping..."
+                skip=true
+                break
+            fi
+        done
+
+        if [ "$skip" = false ]; then
+            echo "Attempting to require module: $name"
+            if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
+                --cmd "set rtp+=$out,${deps// /,}" \
+                --cmd "lua require('$name')"; then
+                check_passed=true
+                successful_modules+=("$name")
+                echo "Successfully required module: $name"
+            else
+                echo "Failed to require module: $name"
+                failed_modules+=("$name")
+            fi
         fi
     done
     set -e
