@@ -7,39 +7,30 @@ discover_modules() {
     echo "Running module discovery in source directory..."
 
     # Create unique lists so we can organize later
-    lua_init=()
-    plugin=()
-    lua_name=()
-    lua_subfolder=()
-    folder_path=()
-
-    # Check directory and organize lua files into buckets
-    while IFS= read -r lua_file; do
-        if [[ "$lua_file" =~ lua/([^/]+)/init\.lua$ ]]; then
-            echo "$lua_file"
-            lua_init+=("${BASH_REMATCH[1]}")
-        elif [[ ! "$lua_file" =~ ftplugin && "$lua_file" =~ plugin/([^/]+)\.lua$ ]]; then
-            echo "$lua_file"
-            plugin+=("${BASH_REMATCH[1]}")
-        elif [[ "$lua_file" =~ lua/([^/]+).lua$ ]]; then
-            echo "$lua_file"
-            lua_name+=("${BASH_REMATCH[1]}")
-        elif [[ "$lua_file" =~ lua/(.*)\.lua$ ]]; then
-            echo "$lua_file"
-            lua_subfolder+=("${BASH_REMATCH[1]//\//.}")
-        elif [[ ! "$lua_file" =~ .*source/(debug|scripts?|tests?|spec)/ && "$lua_file" =~ .*source/(.*)\.lua$ ]]; then
-            echo "$lua_file"
-            folder_path+=("${BASH_REMATCH[1]//\//.}")
-        fi
-    done < <(find "$src" -name '*.lua')
-
-    # Creating a sorted list to organize checks in order of importance
     modules=()
-    modules+=("${lua_init[@]}")
-    modules+=("${plugin[@]}")
-    modules+=("${lua_name[@]}")
-    modules+=("${lua_subfolder[@]}")
-    modules+=("${folder_path[@]}")
+
+    while IFS= read -r lua_file; do
+        # Ignore certain infra directories
+        if [[ "$lua_file" =~ debug/|scripts?/|tests?/|spec/ || "$lua_file" =~ .*\meta.lua ]]; then
+            continue
+        # Ignore optional telescope and lualine modules
+        elif [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
+            continue
+        # Grab main module names
+        elif [[ "$lua_file" =~ ^lua/([^/]+)/init.lua$ ]]; then
+            echo "$lua_file"
+            modules+=("${BASH_REMATCH[1]}")
+        # Check other lua files
+        elif [[ "$lua_file" =~ ^lua/(.*)\.lua$ ]]; then
+            echo "$lua_file"
+            # Replace slashes with dots to form the module name
+            module_name="${BASH_REMATCH[1]//\//.}"
+            modules+=("$module_name")
+        elif [[ "$lua_file" =~ ^([^/.][^/]*)\.lua$ ]]; then
+            echo "$lua_file"
+            modules+=("${BASH_REMATCH[1]}")
+        fi
+    done < <(find "$src" -name '*.lua' | xargs -n 1 realpath --relative-to="$src")
 
     nvimRequireCheck=("${modules[@]}")
     echo "Discovered modules: ${nvimRequireCheck[*]}"
