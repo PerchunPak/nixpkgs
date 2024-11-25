@@ -3879,3 +3879,38 @@ in
   in
   lib.genAttrs nodePackageNames nodePackage2VimPackage
 )
+
+# nix build .#vimPlugins.LazyVim
+# nix build .#vimPlugins.SpaceVim
+# nix build .#vimPlugins.base46
+# nix build .#vimPlugins.floating-nvim
+# nix build .#vimPlugins.nvim-fzf-commands
+# nix build .#vimPlugins.nvim-paredit
+# nix build .#vimPlugins.nvim-rip-substitute
+# nix build .#vimPlugins.nvim-snippets
+# nix build .#vimPlugins.nvim-surround
+# nix build .#vimPlugins.nvim-treesitter-context
+# nix build .#vimPlugins.nvim-unception
+# nix build .#vimPlugins.nvzone-menu
+# nix build .#vimPlugins.omni-vim
+# nix build .#vimPlugins.onedark-nvim
+# nix build .#vimPlugins.openscad-nvim
+# nix build .#vimPlugins.outline-nvim
+# nix build .#vimPlugins.package-info-nvim
+# nix build .#vimPlugins.parpar-nvim
+# nix build .#vimPlugins.poimandres-nvim
+# nix build .#vimPlugins.pywal-nvim
+# nix build .#vimPlugins.qmk-nvim
+# nix build .#vimPlugins.rainbow-delimiters-nvim
+# nix build .#vimPlugins.renamer-nvim
+# nix build .#vimPlugins.rust-tools-nvim
+# nix build .#vimPlugins.samodostal-image-nvim
+# nix build .#vimPlugins.searchbox-nvim
+# nix build .#vimPlugins.smart-open-nvim
+# nix build .#vimPlugins.smart-splits-nvim
+# nix build .#vimPlugins.snacks-nvim
+# nix build .#vimPlugins.snap
+# nix build .#vimPlugins.spaceman-nvim
+# nix build .#vimPlugins.supermaven-nvim
+# nix build .#vimPlugins.text-case-nvim
+# nix build .#vimPlugins.tokyonight-nvim
