@@ -2793,6 +2793,16 @@ in
     ];
   };
 
+  snap = super.snap.overrideAttrs {
+    nvimSkipModule = [
+      "snap.consumer.fzy.all"
+      "snap.consumer.fzy.filter"
+      "snap.consumer.fzy.init"
+      "snap.consumer.fzy.positions"
+      "snap.consumer.fzy.score"
+    ];
+  };
+
   sniprun =
     let
       version = "1.3.16";
@@ -2863,6 +2873,11 @@ in
     meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
   };
 
+  spaceman-nvim = super.spaceman-nvim.overrideAttrs {
+    # Optional telescope integration
+    nvimSkipModule = "spaceman.adapters.telescope";
+  };
+
   sqlite-lua = super.sqlite-lua.overrideAttrs (
     oa:
     let
@@ -2917,6 +2932,11 @@ in
       substituteInPlace lua/stylish/components/menu.lua --replace xwininfo ${xorg.xwininfo}/bin/xwininfo
     '';
     nvimRequireCheck = "stylish";
+  };
+
+  supermaven-nvim = super.supermaven-nvim.overrideAttrs {
+    # TODO: handle supermaven binary
+    doCheck = false;
   };
 
   sved =
@@ -3924,7 +3944,5 @@ in
 # nix build .#vimPlugins.smart-splits-nvim
 # nix build .#vimPlugins.snacks-nvim
 # nix build .#vimPlugins.snap
-# nix build .#vimPlugins.spaceman-nvim
 # nix build .#vimPlugins.supermaven-nvim
 # nix build .#vimPlugins.text-case-nvim
-# nix build .#vimPlugins.tokyonight-nvim
