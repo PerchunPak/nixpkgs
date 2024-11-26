@@ -158,6 +158,10 @@ in
     nvimRequireCheck = "advanced_git_search.utils";
   };
 
+  astrotheme = super.astrotheme.overrideAttrs {
+    nvimRequireCheck = "astrotheme";
+  };
+
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # NOTE:vim plugin with optional lua telescope integration
     doCheck = false;
@@ -1447,6 +1451,18 @@ in
     nvimRequireCheck = "lspecho";
   };
 
+  lspsaga-nvim = super.lspsaga-nvim.overrideAttrs {
+    # Other modules require setup call first
+    nvimRequireCheck = [
+      "lspsaga"
+    ];
+  };
+
+  ltex_extra-nvim = super.ltex_extra-nvim.overrideAttrs {
+    # Other modules require setup call first
+    nvimRequireCheck = "ltex_extra";
+  };
+
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
     dependencies = with self; [ lualine-nvim ];
   };
@@ -1576,6 +1592,11 @@ in
       sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
+  mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {
+    # Requires setup call and has optional nvim-cmp dependency
+    nvimRequireCheck = "mkdnflow";
   };
 
   moveline-nvim =
