@@ -2294,6 +2294,11 @@ in
     nvimRequireCheck = "coverage";
   };
 
+  nvim-fzf-commands = super.nvim-fzf-commands.overrideAttrs {
+    # TODO: revisit why it's not working
+    buildInputs = [ luaPackages.fzf-lua ];
+  };
+
   nvim-moonwalk = super.nvim-moonwalk.overrideAttrs {
     # Asserts log file exists before it is created
     doCheck = false;
