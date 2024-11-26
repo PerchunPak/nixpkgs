@@ -3777,6 +3777,7 @@ in
   };
 
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
+    dependencies = with self; [ lush-nvim ];
     nvimSkipModule = [
       # Requires global variable set
       "randombones"
