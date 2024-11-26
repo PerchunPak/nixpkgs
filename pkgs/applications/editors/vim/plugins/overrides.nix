@@ -3194,6 +3194,15 @@ in
     nvimRequireCheck = "todo-comments";
   };
 
+  tokyonight-nvim = super.tokyonight-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Meta file
+      "tokyonight.docs"
+      # Optional integration
+      "tokyonight.extra.fzf"
+    ];
+  };
+
   trouble-nvim = super.trouble-nvim.overrideAttrs {
     # Meta file
     nvimSkipModule = "trouble.docs";
