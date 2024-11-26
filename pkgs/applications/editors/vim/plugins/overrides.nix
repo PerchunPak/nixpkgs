@@ -2074,6 +2074,8 @@ in
       neotest
       nvim-nio
     ];
+    # Unit test assert
+    nvimSkipModule = "neotest-jest-assertions";
   };
 
   neotest-minitest = super.neotest-minitest.overrideAttrs {
@@ -2106,6 +2108,8 @@ in
       plenary-nvim
       telescope-nvim
     ];
+    # Unit test assert
+    nvimSkipModule = "neotest-playwright-assertions";
   };
 
   neotest-plenary = super.neotest-plenary.overrideAttrs {
@@ -2161,6 +2165,8 @@ in
       nvim-nio
       plenary-nvim
     ];
+    # Unit test assert
+    nvimSkipModule = "neotest-vitest-assertions";
   };
 
   neotest-zig = super.neotest-zig.overrideAttrs {
@@ -3183,12 +3189,19 @@ in
     nvimRequireCheck = "todo-comments";
   };
 
+  trouble-nvim = super.trouble-nvim.overrideAttrs {
+    # Meta file
+    nvimSkipModule = "trouble.docs";
+  };
+
   tsc-nvim = super.tsc-nvim.overrideAttrs {
     patches = [ ./patches/tsc.nvim/fix-path.patch ];
 
     postPatch = ''
       substituteInPlace lua/tsc/utils.lua --replace '@tsc@' ${typescript}/bin/tsc
     '';
+    # Test case
+    nvimSkipModule = "tsc.better-messages-test";
   };
 
   tssorter-nvim = super.tssorter-nvim.overrideAttrs {
@@ -3342,6 +3355,10 @@ in
     '';
   };
 
+  vim-apm = super.vim-apm.overrideAttrs {
+    nvimSkipModule = "run";
+  };
+
   vim-bazel = super.vim-bazel.overrideAttrs {
     dependencies = with self; [ vim-maktaba ];
   };
@@ -3391,6 +3408,11 @@ in
         sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
       })
     ];
+  };
+
+  vim-flog = super.vim-flog.overrideAttrs {
+    # Not intended to be required, used by vim plugin
+    nvimSkipModule = "flog.graph_bin";
   };
 
   vim-fzf-coauthorship = super.vim-fzf-coauthorship.overrideAttrs {
@@ -3466,6 +3488,11 @@ in
     buildInputs = [ vim ];
   };
 
+  vim-illuminate = super.vim-illuminate.overrideAttrs {
+    # Optional treesitter integration
+    nvimSkipModule = "illuminate.providers.treesitter";
+  };
+
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
@@ -3490,6 +3517,11 @@ in
           "'${vim-markdown-composer-bin}/bin/markdown-composer'"
       '';
     };
+
+  vim-matchup = super.vim-matchup.overrideAttrs {
+    # Optional treesitter integration
+    nvimSkipModule = "treesitter-matchup.third-party.query";
+  };
 
   vim-metamath = super.vim-metamath.overrideAttrs {
     preInstall = "cd vim";
@@ -3553,6 +3585,11 @@ in
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = with self; [ vim-textobj-user ];
     meta.maintainers = with lib.maintainers; [ farlion ];
+  };
+
+  vim-tpipeline = super.vim-tpipeline.overrideAttrs {
+    # Requires global variable
+    nvimSkipModule = "tpipeline.main";
   };
 
   vim-unimpaired = super.vim-unimpaired.overrideAttrs {
@@ -3673,6 +3710,20 @@ in
     ];
   };
 
+  virt-column-nvim = super.virt-column-nvim.overrideAttrs {
+    # Meta file
+    nvimSkipModule = "virt-column.config.types";
+  };
+
+  which-key-nvim = super.which-key-nvim.overrideAttrs {
+    nvimSkipModule = [ "which-key.docs" ];
+  };
+
+  wiki-vim = super.wiki-vim.overrideAttrs {
+    # Optional telescope integration
+    nvimSkipModule = [ "wiki.telescope" ];
+  };
+
   windows-nvim = super.windows-nvim.overrideAttrs {
     dependencies = with self; [
       middleclass
@@ -3688,6 +3739,14 @@ in
 
   YankRing-vim = super.YankRing-vim.overrideAttrs {
     sourceRoot = ".";
+  };
+
+  yanky-nvim = super.yanky-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Optional telescope integration
+      "yanky.telescope.mapping"
+      "yanky.telescope.yank_history"
+    ];
   };
 
   yazi-nvim = super.yazi-nvim.overrideAttrs {
@@ -3715,6 +3774,34 @@ in
       ];
       platforms = platforms.unix;
     };
+  };
+
+  zenbones-nvim = super.zenbones-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # Requires global variable set
+      "randombones"
+      "randombones.palette"
+      # Optional shipwright
+      "zenbones.shipwright.runners.alacritty"
+      "zenbones.shipwright.runners.foot"
+      "zenbones.shipwright.runners.iterm"
+      "zenbones.shipwright.runners.kitty"
+      "zenbones.shipwright.runners.lightline"
+      "zenbones.shipwright.runners.lualine"
+      "zenbones.shipwright.runners.tmux"
+      "zenbones.shipwright.runners.vim"
+      "zenbones.shipwright.runners.wezterm"
+      "zenbones.shipwright.runners.windows_terminal"
+    ];
+  };
+
+  zk-nvim = super.zk-nvim.overrideAttrs {
+    # Optional integrations
+    nvimSkipModule = [
+      "zk.pickers.fzf_lua"
+      "zk.pickers.minipick"
+      "zk.pickers.telescope"
+    ];
   };
 
   zoxide-vim = super.zoxide-vim.overrideAttrs {
