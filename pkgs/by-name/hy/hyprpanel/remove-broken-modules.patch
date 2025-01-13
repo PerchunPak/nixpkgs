@@ -1,0 +1,93 @@
+diff --git a/app.ts b/app.ts
+index 15e5822..0134822 100644
+--- a/app.ts
++++ b/app.ts
+@@ -2,7 +2,6 @@ import './src/lib/session';
+ import './src/scss/style';
+ import './src/globals/useTheme';
+ import './src/globals/wallpaper';
+-import './src/globals/systray';
+ import './src/globals/dropdown';
+ import './src/globals/utilities';
+ import './src/components/bar/utils/sideEffects';
+diff --git a/src/components/bar/exports.ts b/src/components/bar/exports.ts
+index fc4f9b5..0c3ab2d 100644
+--- a/src/components/bar/exports.ts
++++ b/src/components/bar/exports.ts
+@@ -8,7 +8,6 @@ import { Network } from '../../components/bar/modules/network/index';
+ import { Bluetooth } from '../../components/bar/modules/bluetooth/index';
+ import { BatteryLabel } from '../../components/bar/modules/battery/index';
+ import { Clock } from '../../components/bar/modules/clock/index';
+-import { SysTray } from '../../components/bar/modules/systray/index';
+ 
+ // Custom Modules
+ import { Ram } from '../../components/bar/modules/ram/index';
+@@ -23,7 +22,6 @@ import { Weather } from '../../components/bar/modules/weather/index';
+ import { Power } from '../../components/bar/modules/power/index';
+ import { Hyprsunset } from '../../components/bar/modules/hyprsunset/index';
+ import { Hypridle } from '../../components/bar/modules/hypridle/index';
+-import { Cava } from '../../components/bar/modules/cava/index';
+ 
+ export {
+     Menu,
+@@ -36,7 +34,6 @@ export {
+     Bluetooth,
+     BatteryLabel,
+     Clock,
+-    SysTray,
+ 
+     // Custom Modules
+     Ram,
+@@ -51,5 +48,4 @@ export {
+     Power,
+     Hyprsunset,
+     Hypridle,
+-    Cava,
+ };
+diff --git a/src/components/bar/index.tsx b/src/components/bar/index.tsx
+index e770c04..e8d4c50 100644
+--- a/src/components/bar/index.tsx
++++ b/src/components/bar/index.tsx
+@@ -9,7 +9,6 @@ import {
+     Bluetooth,
+     BatteryLabel,
+     Clock,
+-    SysTray,
+ 
+     // Custom Modules
+     Ram,
+@@ -24,7 +23,6 @@ import {
+     Power,
+     Hyprsunset,
+     Hypridle,
+-    Cava,
+ } from './exports';
+ 
+ import { WidgetContainer } from './shared/WidgetContainer';
+@@ -50,7 +48,6 @@ const widget = {
+     network: (): JSX.Element => WidgetContainer(Network()),
+     bluetooth: (): JSX.Element => WidgetContainer(Bluetooth()),
+     clock: (): JSX.Element => WidgetContainer(Clock()),
+-    systray: (): JSX.Element => WidgetContainer(SysTray()),
+     ram: (): JSX.Element => WidgetContainer(Ram()),
+     cpu: (): JSX.Element => WidgetContainer(Cpu()),
+     cputemp: (): JSX.Element => WidgetContainer(CpuTemp()),
+@@ -63,7 +60,6 @@ const widget = {
+     power: (): JSX.Element => WidgetContainer(Power()),
+     hyprsunset: (): JSX.Element => WidgetContainer(Hyprsunset()),
+     hypridle: (): JSX.Element => WidgetContainer(Hypridle()),
+-    cava: (): JSX.Element => WidgetContainer(Cava()),
+ };
+ 
+ export const Bar = (() => {
+diff --git a/src/lib/constants/services.ts b/src/lib/constants/services.ts
+index 27d04c1..d809c7d 100644
+--- a/src/lib/constants/services.ts
++++ b/src/lib/constants/services.ts
+@@ -32,6 +32,3 @@ export const brightnessService = Brightness.get_default();
+ 
+ import AstalPowerProfiles from 'gi://AstalPowerProfiles?version=0.1';
+ export const powerProfilesService = AstalPowerProfiles.get_default();
+-
+-import AstalCava from 'gi://AstalCava';
+-export const cavaService = AstalCava.get_default();
