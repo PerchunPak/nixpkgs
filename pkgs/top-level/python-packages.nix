@@ -9108,6 +9108,8 @@ self: super: with self; {
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
+  nbdb = callPackage ../development/python-modules/nbdb { };
+
   nbdev = callPackage ../development/python-modules/nbdev { };
 
   nbdime = callPackage ../development/python-modules/nbdime { };
