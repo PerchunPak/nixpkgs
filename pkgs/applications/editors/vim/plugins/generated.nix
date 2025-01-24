@@ -1662,17 +1662,6 @@ final: prev:
     meta.homepage = "https://github.com/xavierd/clang_complete/";
   };
 
-  clangd_extensions-nvim = buildVimPlugin {
-    pname = "clangd_extensions.nvim";
-    version = "2024-10-05";
-    src = fetchgit {
-      url = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
-      rev = "8f7b72100883e0e34400d9518d40a03f21e4d0a6";
-      sha256 = "1rlw3h9f9cnbniqqpv9fv2s63g7s4p8ag4n15xja1r4scfxhyrip";
-    };
-    meta.homepage = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
-  };
-
   clever-f-vim = buildVimPlugin {
     pname = "clever-f.vim";
     version = "2022-10-15";
@@ -1767,17 +1756,6 @@ final: prev:
       sha256 = "093l4cdlmdgrhnv502kkyj4qi4jk656ks90wmfjbkxdffx6xdsrc";
     };
     meta.homepage = "https://github.com/tzachar/cmp-ai/";
-  };
-
-  cmp-async-path = buildVimPlugin {
-    pname = "cmp-async-path";
-    version = "2024-10-21";
-    src = fetchgit {
-      url = "https://codeberg.org/FelipeLema/cmp-async-path/";
-      rev = "d6d1ffa2075039632a2d71e8fa139818e15ac757";
-      sha256 = "1x10v0kd0i2pdxknzdn3zgqdn4hgbivgnczsj56wc32jzcs6k49i";
-    };
-    meta.homepage = "https://codeberg.org/FelipeLema/cmp-async-path/";
   };
 
   cmp-beancount = buildVimPlugin {
@@ -4643,17 +4621,6 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
   };
 
-  gitlab-vim = buildVimPlugin {
-    pname = "gitlab.vim";
-    version = "2025-01-17";
-    src = fetchgit {
-      url = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
-      rev = "7de00395ec13ab568b0bf50f1bf7d201ec395b1a";
-      sha256 = "1bppvyvpm32jps898nrv096r5kigdsdz6kimmhiigv4xf3iwjv9j";
-    };
-    meta.homepage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
-  };
-
   gitlinker-nvim = buildVimPlugin {
     pname = "gitlinker.nvim";
     version = "2023-02-03";
@@ -5037,17 +5004,6 @@ final: prev:
       sha256 = "11h8gbxf6fqfi7qav9w0s5ld5a6v9j52gal47svd90qn53xjncsq";
     };
     meta.homepage = "https://github.com/m4xshen/hardtime.nvim/";
-  };
-
-  hare-vim = buildVimPlugin {
-    pname = "hare.vim";
-    version = "2025-01-15";
-    src = fetchgit {
-      url = "https://git.sr.ht/~sircmpwn/hare.vim";
-      rev = "e139320314611e3acf7947d0fd6f42d9b499c7ef";
-      sha256 = "1fja5irszf98awi6rsrk6ws6i44xvsqa26hmcrpkw541c8s4gprg";
-    };
-    meta.homepage = "https://git.sr.ht/~sircmpwn/hare.vim";
   };
 
   harpoon = buildVimPlugin {
@@ -6396,17 +6352,6 @@ final: prev:
       sha256 = "0y1xmam0zqphyk3dk2r09mvjhl6c5zihzakkw3wxg3qwf9h80kfk";
     };
     meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
-  };
-
-  lsp_lines-nvim = buildVimPlugin {
-    pname = "lsp_lines.nvim";
-    version = "2024-12-21";
-    src = fetchgit {
-      url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
-      rev = "a92c755f182b89ea91bd8a6a2227208026f27b4d";
-      sha256 = "14ym4d8vgvw2vhsaxik8612wyvszd895q69n9h100yd7x5jqhy4c";
-    };
-    meta.homepage = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
   };
 
   lsp_signature-nvim = buildVimPlugin {
@@ -9352,17 +9297,6 @@ final: prev:
       sha256 = "0s2z4nd5anh5r3z4iv9fa4m5vnkbdl6aj7rw5ssn3cm52kplw3fq";
     };
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-jqx/";
-  };
-
-  nvim-julia-autotest = buildVimPlugin {
-    pname = "nvim-julia-autotest";
-    version = "2022-10-31";
-    src = fetchgit {
-      url = "https://gitlab.com/usmcamp0811/nvim-julia-autotest";
-      rev = "b74e2f9c961e604cb56cc23f87188348bfa0f33f";
-      sha256 = "0jd6r5chh4rdj1jyrsqhb67glwqjcygzvk8gyp0v7axr2xn6r8r1";
-    };
-    meta.homepage = "https://gitlab.com/usmcamp0811/nvim-julia-autotest";
   };
 
   nvim-lastplace = buildVimPlugin {
@@ -17875,17 +17809,6 @@ final: prev:
       sha256 = "0gblxnqdifln3sswg96dp18h4367hpqb0z72ydrvlz186471zgps";
     };
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
-  };
-
-  vim-stationeers-ic10-syntax = buildVimPlugin {
-    pname = "vim-stationeers-ic10-syntax";
-    version = "2025-01-08";
-    src = fetchgit {
-      url = "https://gitlab.com/LittleMorph/vim-ic10";
-      rev = "7c1f13b198cfe122fb52f6abfb8dc95d5ca51013";
-      sha256 = "0pxk1qq6niy9msm369w5xn2jcwpa8a30hpqk6hb1ag1v6244j3g1";
-    };
-    meta.homepage = "https://gitlab.com/LittleMorph/vim-ic10";
   };
 
   vim-strip-trailing-whitespace = buildVimPlugin {
