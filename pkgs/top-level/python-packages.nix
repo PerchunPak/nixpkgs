@@ -9456,6 +9456,8 @@ self: super: with self; {
 
   nunavut = callPackage ../development/python-modules/nunavut { };
 
+  nupd = callPackage ../development/python-modules/nupd { };
+
   nutils = callPackage ../development/python-modules/nutils { };
 
   nutils-poly = callPackage ../development/python-modules/nutils-poly { };
