@@ -10,6 +10,7 @@ Excluded plugins from that list (should be packaged later anyway):
 - [bar-theme-config](https://github.com/allisonhere/zellij-bar-theme-config): not a plugin, but a separate application
 - [fzf-zellij](https://github.com/k-kuroguro/fzf-zellij): [closed source](https://github.com/k-kuroguro/fzf-zellij/issues/1)
 - [gitpod-zellij](https://github.com/ona-samples/gitpod.zellij): not a plugin, but a separate application?
+- [neolij.nvim](https://github.com/y2w8/neolij.nvim): written in Lua
 - [opencode-zellij-namer](https://github.com/24601/opencode-zellij-namer): written in TypeScript, not Rust
 - [theme-configurator](https://rosmur.github.io/zellij-theme-configurator/): not a plugin, but a separate application
 - [yazelix](https://github.com/luccahuguet/yazelix): written in Nushell
@@ -23,7 +24,7 @@ Excluded plugins from that list (should be packaged later anyway):
 
 Contributions are welcome!
 
-[awesome-zellij]: https://github.com/zellij-org/awesome-zellij/blob/95fce2c02a2dcca33e4972eed3eba64d516693c9/README.md
+[awesome-zellij]: https://github.com/zellij-org/awesome-zellij/blob/b066d3ed708963ea1c34ea2b1bf27b9cf04bd4c7/README.md
 
 ## Specifying runtime dependencies
 
