@@ -31,6 +31,8 @@ evalConfigArgs@{
   prefix ? [ ],
   lib ? import ../../lib,
   extraModules ? [ ],
+  # Enable dependency tracking for config accesses
+  trackDependencies ? false,
 }:
 
 let
@@ -80,6 +82,8 @@ let
       ''
       x;
 
+  processDependencyTracking = import ./dependency-tracking.nix { inherit lib; };
+
   legacyModules =
     lib.optional (evalConfigArgs ? extraArgs) {
       config = {
@@ -105,7 +109,7 @@ let
     locatedModules ++ legacyModules;
 
   noUserModules = evalModulesMinimal {
-    inherit prefix specialArgs;
+    inherit prefix specialArgs trackDependencies;
     modules =
       baseModules
       ++ extraModules
@@ -139,6 +143,29 @@ let
       inherit (configuration._module.args) pkgs;
       inherit lib;
       extendModules = args: withExtraAttrs (configuration.extendModules args);
-    };
+    }
+    // lib.optionalAttrs (configuration ? _dependencyTracking) (
+      let
+        tracking = processDependencyTracking configuration;
+        wrappedToplevel = tracking.mkTrackedToplevel {
+          inherit (configuration._module.args) pkgs;
+          toplevel = configuration.config.system.build.toplevel;
+        };
+      in
+      {
+        dependencyTracking = tracking;
+        # Override config so config.system.build.toplevel transparently
+        # returns the wrapper that includes tracking.json.  The inner
+        # (real) toplevel is evaluated first via builtins.seq inside
+        # mkTrackedToplevel, so there is no infinite recursion.
+        config = configuration.config // {
+          system = configuration.config.system // {
+            build = configuration.config.system.build // {
+              toplevel = wrappedToplevel;
+            };
+          };
+        };
+      }
+    );
 in
 withWarnings (withExtraAttrs nixosWithUserModules)
